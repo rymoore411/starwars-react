@@ -26,7 +26,7 @@
           {
             people.map(person => {
               return (
-                <div id="list" key = {person.id} onClick={()=> select(person.name)}>
+                <div id="list" key = {person.id}>
                 <a href={`#${person.id}`}>
                 {person.name}
                 </a>
@@ -38,22 +38,22 @@
     )
   }
 
-  const Detail = ({people, name, select})=> {
+  const Detail = ({people, id})=> {
       return(
       <div>
       <a href = '#'>
-      <p onClick={ ()=> select(null)}>Hide Details</p>
+      <p>Hide Details</p>
       </a>
-      <h2>Details for {name}</h2>
+      <h2>Details for {people.name}</h2>
       {people.map(person => {
 
-      if(person.name === name)
+      if(person.id === id)
       {
       return(
         <table key={person.id}>
           <tbody>
             <tr>
-              <td><b>Name:</b> {name}</td>
+              <td><b>Name:</b> {person.name}</td>
             </tr>
             <tr>
               <td><b>Hair Color:</b> {person.hair_color}</td>
@@ -83,14 +83,13 @@
       super();
       this.state = {
         people: [],
-        name: null,
         id: null
       };
       this.select = this.select.bind(this);
     }
 
-    select(name){
-      this.setState({ name });
+    select(id){
+      this.setState({ id });
     }
 
     async componentDidMount(){
@@ -122,7 +121,7 @@
     }
 
     render(){
-      const { people, name } = this.state;
+      const { people, id } = this.state;
       const { select } = this;
       return (
         <div>
@@ -130,7 +129,7 @@
           <List people={ people } select={ select }/>
         }
         {
-          name ? <Detail people={ people } name={ name } select={select}/> : null
+          id ? <Detail people={ people } id={ id }/> : null
         }
         </div>
       )
