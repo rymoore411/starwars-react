@@ -1,6 +1,10 @@
 <html>
   <head>
     <style>
+    * {
+        box-sizing: border-box;
+      }
+
     table, th, td {
         border: 0.5px solid black;
     }
@@ -8,6 +12,16 @@
       color: blue;
       font-family: Arial, Helvetica, sans-serif;
     }
+    .column{
+      float: left;
+      width: 50%;
+      padding: 10px;
+      height: 300px;
+    }
+    /* #right{
+      display: flex;
+      justify-content: flex-end;
+    } */
     </style>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
@@ -20,8 +34,9 @@
   <div id='root'></div>
 <script type='text/babel'>
 
-  const List = ({ people, select}) => {
+  const List = ({ people }) => {
     return(
+      <div className = 'column'>
       <ul>
           {
             people.map(person => {
@@ -35,22 +50,23 @@
             })
           }
         </ul>
+        </div>
     )
   }
 
   const Detail = ({people, id})=> {
       return(
-      <div>
-      <a href = '#'>
-      <p>Hide Details</p>
-      </a>
-      <h2>Details for {people.name}</h2>
+      <div className = 'column'>
       {people.map(person => {
-
       if(person.id === id)
       {
       return(
-        <table key={person.id}>
+        <div key={person.id}>
+        <a href = '#'>
+        <p>Hide Details</p>
+        </a>
+        <h2>Details for {person.name}</h2>
+        <table>
           <tbody>
             <tr>
               <td><b>Name:</b> {person.name}</td>
@@ -72,6 +88,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
     )
     }
 })}
@@ -108,7 +125,7 @@
       const people = data.results;
 
       //Add IDs to each person
-      let countId = 0;
+      let countId = 1;
       people.forEach((el) => {
         el.id = countId;
         countId++;
