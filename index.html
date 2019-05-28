@@ -26,8 +26,10 @@
           {
             people.map(person => {
               return (
-                <div id="list" key = {person.name} onClick={()=> select(person.name)}>
+                <div id="list" key = {person.id} onClick={()=> select(person.name)}>
+                <a href={`#${person.id}`}>
                 {person.name}
+                </a>
                 </div>
               )
             })
@@ -39,32 +41,34 @@
   const Detail = ({people, name, select})=> {
       return(
       <div>
+      <a href = '#'>
       <p onClick={ ()=> select(null)}>Hide Details</p>
+      </a>
       <h2>Details for {name}</h2>
       {people.map(person => {
 
       if(person.name === name)
       {
       return(
-        <table>
+        <table key={person.id}>
           <tbody>
             <tr>
-              <td key = {name}><b>Name:</b> {name}</td>
+              <td><b>Name:</b> {name}</td>
             </tr>
             <tr>
-              <td key = {person.name}><b>Hair Color:</b> {person.hair_color}</td>
+              <td><b>Hair Color:</b> {person.hair_color}</td>
             </tr>
             <tr>
-              <td key = {person.name}><b>Height:</b> {person.height}</td>
+              <td><b>Height:</b> {person.height}</td>
             </tr>
             <tr>
-              <td key = {person.name}><b>Eye Color:</b> {person.eye_color}</td>
+              <td><b>Eye Color:</b> {person.eye_color}</td>
             </tr>
             <tr>
-              <td key = {person.name}><b>Birth Year:</b> {person.birth_year}</td>
+              <td><b>Birth Year:</b> {person.birth_year}</td>
             </tr>
             <tr>
-              <td key = {person.name}><b>Homeworld:</b> {person.homeworld}</td>
+              <td><b>Homeworld:</b> {person.homeworld}</td>
             </tr>
           </tbody>
         </table>
@@ -79,7 +83,8 @@
       super();
       this.state = {
         people: [],
-        name: null
+        name: null,
+        id: null
       };
       this.select = this.select.bind(this);
     }
@@ -89,10 +94,26 @@
     }
 
     async componentDidMount(){
+
       try{
+      window.addEventListener('hashchange', ()=>{
+        const id = window.location.hash.slice(1)*1;
+        this.setState({ id });
+      });
+      if(window.location.hash.length > 1){
+        const id = window.location.hash.slice(1)*1;
+        this.setState({ id });
+      }
       const response = await fetch('https://swapi.co/api/people/');
       const data = await response.json();
       const people = data.results;
+
+      //Add IDs to each person
+      let countId = 0;
+      people.forEach((el) => {
+        el.id = countId;
+        countId++;
+      })
       this.setState({people});
       }
       catch (err){
